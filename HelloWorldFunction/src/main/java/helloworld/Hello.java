@@ -25,7 +25,7 @@ public class Hello implements RequestHandler<APIGatewayProxyRequestEvent, APIGat
 
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
                 .withHeaders(headers);
-            String output = String.format("{ \"message\": \"Hello World\" }");
+            String output = String.format("{ \"message\": \"Hello World 2\" }");
 
             return response
                     .withStatusCode(200)
