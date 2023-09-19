@@ -9,18 +9,21 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
+        <maven.surefire.version>3.1.2</maven.surefire.version>
+
+        <skip.unit.tests>false</skip.unit.tests>
+
+        <env.var.log_level>DEBUG</env.var.log_level>
+        <env.var.annotation_dynamo_table>cmt-dev-1-Annotation-use1</env.var.annotation_dynamo_table>
+        <env.var.annotation_s3_bucket>cmt-dev-1-annotation-multimedia-use1</env.var.annotation_s3_bucket>
+        <env.var.aws_region>us-east-1</env.var.aws_region>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-lambda-java-core</artifactId>
-            <version>1.2.2</version>
-        </dependency>
-        <dependency>
-          <groupId>com.amazonaws</groupId>
-          <artifactId>aws-lambda-java-events</artifactId>
-          <version>3.11.0</version>
+            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
@@ -28,30 +31,62 @@
             <version>2.20.88</version>
         </dependency>
         <dependency>
+          <groupId>com.amazonaws</groupId>
+          <artifactId>aws-lambda-java-events</artifactId>
+          <version>3.11.0</version>
+        </dependency>
+        <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
           <version>4.13.2</version>
           <scope>test</scope>
         </dependency>
+
+      <dependency>
+        <groupId>com.turnitin.commons</groupId>
+        <artifactId>commons</artifactId>
+        <version>3.2.5</version>
+      </dependency>
+
     </dependencies>
 
     <build>
       <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-shade-plugin</artifactId>
-          <version>3.2.4</version>
-          <configuration>
-          </configuration>
-          <executions>
-            <execution>
-              <phase>package</phase>
-              <goals>
-                <goal>shade</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <version>${maven.surefire.version}</version>
+              <configuration>
+                  <argLine>-Duser.timezone=UTC</argLine>
+                  <skipTests>${skip.unit.tests}</skipTests>
+                  <excludes>
+                      <exclude>**/IT*.java</exclude>
+                      <exclude>**/*IT.java</exclude>
+                      <exclude>**/*ITCase.java</exclude>
+                  </excludes>
+                  <environmentVariables>
+                      <annotation_dynamo_table>cmt-dev-1-Annotation-use1</annotation_dynamo_table>
+                      <annotation_s3_bucket>cmt-dev-1-annotation-multimedia-use1</annotation_s3_bucket>
+                      <AWS_REGION>${env.var.aws_region}</AWS_REGION>
+                      <log_level>${env.var.log_level}</log_level>
+                  </environmentVariables>
+              </configuration>
+          </plugin>
+<!--        <plugin>-->
+<!--          <groupId>org.apache.maven.plugins</groupId>-->
+<!--          <artifactId>maven-shade-plugin</artifactId>-->
+<!--          <version>3.2.4</version>-->
+<!--          <configuration>-->
+<!--          </configuration>-->
+<!--          <executions>-->
+<!--            <execution>-->
+<!--              <phase>package</phase>-->
+<!--              <goals>-->
+<!--                <goal>shade</goal>-->
+<!--              </goals>-->
+<!--            </execution>-->
+<!--          </executions>-->
+<!--        </plugin>-->
       </plugins>
     </build>
 </project>
